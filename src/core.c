@@ -22,10 +22,8 @@
 #include <omp.h>
 #endif
 #include <hwloc.h>
-#if HWLOC_API_VERSION >= 0x00010700
-#include <hwloc/intel-mic.h>
-#else
-#warning "The HWLOC version is too old. Cannot detect Intel Xeon Phis!"
+#if HWLOC_API_VERSION < 0x00020000
+#error "GHOST has been updated to require hwloc 2.x"
 #endif
 
 #ifdef GHOST_INSTR_LIKWID
@@ -223,7 +221,7 @@ ghost_error ghost_init(int argc, char **argv)
         free(cpusetStr);
     }
 
-    int nxeonphis_total;
+    int nxeonphis_total = 0;
     int ncudadevs = 0;
     int nxeonphis = -1;
     int nnumanodes;
@@ -243,30 +241,6 @@ ghost_error ghost_init(int argc, char **argv)
     GHOST_CALL_RETURN(ghost_cu_ndevice(&ncudadevs));
 #endif
 
-
-#if HWLOC_API_VERSION >= 0x00010700
-    hwloc_obj_t phi = NULL;
-
-    do {
-        nxeonphis++;
-        phi = hwloc_intel_mic_get_device_osdev_by_index(topology, nxeonphis);
-    } while (phi);
-
-    if (noderank == 0) {
-        nxeonphis_total = nxeonphis;
-    } else {
-        nxeonphis_total = 0;
-    }
-
-#ifdef GHOST_HAVE_MPI
-    MPI_CALL_RETURN(MPI_Allreduce(MPI_IN_PLACE, &nxeonphis_total, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD));
-#endif
-
-#else
-    GHOST_WARNING_LOG(
-        "Possibly wrong information about the number of Xeon Phis due to outdated HWLOC!");
-    nxeonphis_total = 0;
-#endif
 
     int nactivephis = 0;
 #ifdef GHOST_BUILD_MIC

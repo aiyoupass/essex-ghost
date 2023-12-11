@@ -28,8 +28,13 @@ ghost_error ghost_topology_create()
         return GHOST_ERR_HWLOC;
     }
 
-    if (hwloc_topology_set_flags(ghost_topology,HWLOC_TOPOLOGY_FLAG_IO_DEVICES)) {
+    if (hwloc_topology_set_flags(ghost_topology, HWLOC_TOPOLOGY_FLAG_INCLUDE_DISALLOWED )) {
         GHOST_ERROR_LOG("Could not set topology flags");
+        return GHOST_ERR_HWLOC;
+    }
+
+    if (hwloc_topology_set_type_filter(ghost_topology, HWLOC_OBJ_PCI_DEVICE, HWLOC_TYPE_FILTER_KEEP_ALL)) {
+        GHOST_ERROR_LOG("Could not set topology fiter");
         return GHOST_ERR_HWLOC;
     }
 
@@ -81,7 +86,7 @@ ghost_error ghost_machine_innercache_size(uint64_t *size)
 
     for (depth=(int)hwloc_topology_get_depth(topology)-1; depth>=0; depth--) {
         obj = hwloc_get_obj_by_depth(topology,depth,0);
-        if (obj->type == HWLOC_OBJ_CACHE) {
+        if (obj->type == HWLOC_OBJ_CACHE_DATA) {
             *size = obj->attr->cache.size;
             break;
         }
@@ -101,7 +106,7 @@ ghost_error ghost_machine_outercache_size(uint64_t *size)
 
     for (depth=0; depth<(int)hwloc_topology_get_depth(topology); depth++) {
         obj = hwloc_get_obj_by_depth(topology,depth,0);
-        if (obj->type == HWLOC_OBJ_CACHE) {
+        if (obj->type == HWLOC_OBJ_CACHE_DATA) {
             *size = obj->attr->cache.size;
             break;
         }
@@ -129,7 +134,7 @@ ghost_error ghost_machine_cacheline_size(unsigned *size)
 
     for (depth=0; depth<(int)hwloc_topology_get_depth(topology); depth++) {
         obj = hwloc_get_obj_by_depth(topology,depth,0);
-        if (obj->type == HWLOC_OBJ_CACHE) {
+        if (obj->attr->cache.type == HWLOC_OBJ_CACHE_DATA) {
             *size = obj->attr->cache.linesize;
         }
     }
