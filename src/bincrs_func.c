@@ -1,4 +1,12 @@
-#define _XOPEN_SOURCE 500
+#define _XOPEN_SOURCE 700
+#ifdef __APPLE__
+#ifndef _DARWIN_C_SOURCE
+#define _DARWIN_C_SOURCE 1
+#endif
+#ifndef fopen64
+#define fopen64 fopen
+#endif
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include "ghost/util.h"
@@ -246,4 +254,3 @@ ghost_error ghost_bincrs_header_read(ghost_bincrs_header_t *header, char *matrix
     GHOST_FUNC_EXIT(GHOST_FUNCTYPE_UTIL|GHOST_FUNCTYPE_IO);
     return GHOST_SUCCESS;
 }
-

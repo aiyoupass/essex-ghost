@@ -646,8 +646,12 @@ elseif (${CBLAS_H} STREQUAL "gsl_cblas.h")
     message(STATUS "GSL BLAS found")
     set (BLAS_LIBRARIES "${GSL_LIBRARIES}" CACHE STRING "BLAS libraries")
 else () #generic BLAS
-    set (BLAS_LIBRARIES "" CACHE STRING "BLAS libraries")
-    message(STATUS "Generic BLAS. BLAS_LIBRARIES has to be set manually before linking.")
+    if (BLAS_LIBRARIES)
+        message(STATUS "Generic BLAS. Using preconfigured BLAS_LIBRARIES=${BLAS_LIBRARIES}")
+    else()
+        set (BLAS_LIBRARIES "" CACHE STRING "BLAS libraries")
+        message(STATUS "Generic BLAS. BLAS_LIBRARIES has to be set manually before linking.")
+    endif()
 endif()
 
 
@@ -1052,5 +1056,4 @@ if(GHOST_BUILD_TEST)
   endif()
   add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure DEPENDS simple minimal context diagfirst)
 endif(GHOST_BUILD_TEST)   
-
 

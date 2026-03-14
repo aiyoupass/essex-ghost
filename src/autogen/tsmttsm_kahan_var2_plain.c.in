@@ -57,7 +57,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_d_x_x_1_rm(ghost_densemat *x, ghost_den
 #pragma simd
                 for (k=0; k<K; k++) {
 #pragma unroll_and_jam
-#pragma float_control(precise,on)
                   for (j=0; j<m; j++) {
                         y[j*K+k] = dalpha*vval[i*ldv+j]*wval[i*ldw+k] - c[j*K+k];
                         t[j*K+k] = x_priv[j*K+k] + y[j*K+k];
@@ -75,7 +74,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_d_x_x_1_rm(ghost_densemat *x, ghost_den
 #pragma simd
                 for (k=0; k<K; k++) {
 #pragma unroll_and_jam
-#pragma float_control(precise,on)
                     for (j=0; j<m; j++) {
                         y[j*K+k] = x_priv[j*K+k] - finalc[j*K+k];
                         t[j*K+k] = xval[k*ldx+j] + y[j*K+k];
@@ -197,7 +195,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_z_x_x_1_rm(ghost_densemat *x, ghost_den
 #pragma simd
                     for (k=0; k<K; k++) {
 #pragma unroll_and_jam
-#pragma float_control(precise,on)
                       for (j=0; j<m; j++) {
                             y[j*K+k] = dalpha*conj(vval[i*ldv+j])*wval[i*ldw+k] - c[j*K+k];
                             t[j*K+k] = x_priv[j*K+k] + y[j*K+k];
@@ -216,7 +213,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_z_x_x_1_rm(ghost_densemat *x, ghost_den
 #pragma simd
                     for (k=0; k<K; k++) {
 #pragma unroll_and_jam
-#pragma float_control(precise,on)
                       for (j=0; j<m; j++) {
                             y[j*K+k] = dalpha*vval[i*ldv+j]*wval[i*ldw+k] - c[j*K+k];
                             t[j*K+k] = x_priv[j*K+k] + y[j*K+k];
@@ -235,7 +231,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_z_x_x_1_rm(ghost_densemat *x, ghost_den
 #pragma simd
                 for (k=0; k<K; k++) {
 #pragma unroll_and_jam
-#pragma float_control(precise,on)
                     for (j=0; j<m; j++) {
                         y[j*K+k] = x_priv[j*K+k] - finalc[j*K+k];
                         t[j*K+k] = xval[k*ldx+j] + y[j*K+k];

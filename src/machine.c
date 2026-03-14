@@ -5,7 +5,12 @@
 #include "ghost/omp.h"
 #include "ghost/core.h"
 
+#if defined(__x86_64__) || defined(__i386__) || defined(_M_X64) || defined(_M_IX86)
+#define GHOST_HAS_X86_CPUID 1
 #include <cpuid.h>
+#else
+#define GHOST_HAS_X86_CPUID 0
+#endif
 #include <strings.h>
 #ifdef GHOST_HAVE_OPENMP
 #include <omp.h>
@@ -293,7 +298,15 @@ bool ghost_machine_bigendian()
 }
 
 static void cpuid(int info[4], int InfoType){
+#if GHOST_HAS_X86_CPUID
     __cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
+#else
+    (void)InfoType;
+    info[0] = 0;
+    info[1] = 0;
+    info[2] = 0;
+    info[3] = 0;
+#endif
 }
 
 int ghost_machine_alignment()

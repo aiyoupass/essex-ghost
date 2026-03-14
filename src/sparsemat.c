@@ -17,6 +17,12 @@
 #include <math.h>
 #include <limits.h>
 
+#ifdef __APPLE__
+#ifndef fopen64
+#define fopen64 fopen
+#endif
+#endif
+
 const ghost_sparsemat_src_rowfunc GHOST_SPARSEMAT_SRC_ROWFUNC_INITIALIZER = {
     .func = NULL,
     .maxrowlen = 0,
@@ -1995,4 +2001,3 @@ static ghost_error ghost_sparsemat_upload(ghost_sparsemat* mat)
     return GHOST_SUCCESS;
 }
 #endif
-

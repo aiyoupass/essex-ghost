@@ -151,7 +151,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_z_CFGK_CFGM_1_rm(ghost_densemat *x, gho
 #pragma ivdep
 #endif
                 for (k=0; k<CFGK; k++) {
-#pragma float_control(precise,on)
 #pragma unroll_and_jam
                   for (j=0; j<CFGM; j++) {
                         y[j*CFGK+k] = dalpha*conj(vval[i*ldv+j])*wval[i*ldw+k] - c[j*CFGK+k];
@@ -173,7 +172,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_z_CFGK_CFGM_1_rm(ghost_densemat *x, gho
 #pragma ivdep
 #endif
                 for (k=0; k<CFGK; k++) {
-#pragma float_control(precise,on)
 #pragma unroll_and_jam
                   for (j=0; j<CFGM; j++) {
                         y[j*CFGK+k] = dalpha*vval[i*ldv+j]*wval[i*ldw+k] - c[j*CFGK+k];
@@ -194,7 +192,6 @@ ghost_error ghost_tsmttsm_kahan__a_plain_z_CFGK_CFGM_1_rm(ghost_densemat *x, gho
 #pragma ivdep
 #endif
         for (k=0; k<CFGK; k++) {
-#pragma float_control(precise,on)
 #pragma unroll_and_jam
             for (j=0; j<CFGM; j++) {
                 y[j*CFGK+k] = x_priv[j*CFGK+k] - finalc[j*CFGK+k];

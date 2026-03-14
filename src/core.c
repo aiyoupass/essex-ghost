@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "ghost/config.h"
 #include "ghost/core.h"
 #include "ghost/log.h"

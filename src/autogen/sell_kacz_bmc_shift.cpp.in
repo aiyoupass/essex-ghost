@@ -12,7 +12,7 @@
 #include "ghost/sell_kacz_bmc_shift_gen.h"
 #include <complex>
 
-#ifndef __FUJITSU
+#if !defined(__FUJITSU) && (defined(__x86_64__) || defined(__i386__) || defined(_M_X64) || defined(_M_IX86))
 #include <immintrin.h> 
 #endif
 
@@ -30,7 +30,7 @@ _mm256_insertf128_pd(_mm256_castpd128_pd256(vb), va, 1)
 #endif
 #endif
 
-#ifndef __FUJITSU
+#if !defined(__FUJITSU) && (defined(__x86_64__) || defined(__i386__) || defined(_M_X64) || defined(_M_IX86))
 //AVX
 #define complex_mul(a,b) _mm256_addsub_pd(_mm256_mul_pd(_mm256_shuffle_pd(b,b,0),a),_mm256_mul_pd(_mm256_shuffle_pd(b,b,0xF),_mm256_shuffle_pd(a,a,5)))
 #define complex_mul_conj256(b,a) _mm256_addsub_pd(_mm256_mul_pd(_mm256_shuffle_pd(b,b,0),a),_mm256_mul_pd(_mm256_mul_pd(_mm256_shuffle_pd(b,b,0xF),_mm256_set1_pd(-1.)),_mm256_shuffle_pd(a,a,5)))
